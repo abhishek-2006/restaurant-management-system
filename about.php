@@ -13,7 +13,7 @@
     <header class="site-header">
         <div class="header-container">
             <div class="logo-area">
-                <img src="assets/img/alogo.png" alt="GreenLeaf Logo" class="main-logo">
+                <img src="assets/img/logo.png" alt="GreenLeaf Logo" class="main-logo">
                 <h1 class="brand-name">GreenLeaf</h1>
             </div>
             <nav class="main-nav">
