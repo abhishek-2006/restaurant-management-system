@@ -1,0 +1,169 @@
+/* Global Reset to prevent overflow */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-text-dark: #1e3a24;
+    --color-text-light: #f0f8e9;
+    --color-background-main: #fffdf5;
+    --color-primary-green: #2e7d32;
+    --color-accent-green: #4caf50;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-background-main);
+    color: var(--color-text-dark);
+    line-height: 1.6;
+    overflow-x: hidden; /* Added as safety, but layout is structurally narrow */
+}
+
+/* --- HEADER & LOGO --- */
+.site-header {
+    width: 100%;
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    padding: 1.5rem 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.main-logo {
+    height: 50px; /* Adjust size as needed */
+    width: auto;
+}
+
+.brand-name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.main-nav {
+    display: flex;
+    flex-wrap: wrap; /* Prevents overflow on mobile */
+    justify-content: center;
+    gap: 15px;
+}
+
+.main-nav a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 5px 10px;
+    transition: 0.3s;
+}
+
+.main-nav a:hover, .main-nav a.active {
+    color: #a7f3d0;
+    border-bottom: 2px solid #a7f3d0;
+}
+
+/* --- MAIN WRAPPER & HERO --- */
+.home-wrapper {
+    max-width: 100%;
+    padding: 0 1rem;
+}
+
+.hero-section {
+    padding: 80px 10px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    color: var(--color-primary-green);
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+}
+
+/* --- BUTTONS --- */
+.btn {
+    display: inline-block;
+    padding: 14px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: 0.3s;
+    margin: 10px;
+}
+
+.btn-primary {
+    background-color: var(--color-accent-green);
+    color: white;
+}
+
+.btn-secondary {
+    border: 2px solid var(--color-primary-green);
+    color: var(--color-primary-green);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+/* --- SPECIALTIES GRID --- */
+.specialties-section {
+    padding: 40px 0 80px;
+    text-align: center;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.specialties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Fully responsive grid */
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.spec-item {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    font-weight: 600;
+}
+
+/* --- FOOTER --- */
+.site-footer {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    padding: 30px 1rem;
+    text-align: center;
+}

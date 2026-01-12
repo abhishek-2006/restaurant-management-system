@@ -1,0 +1,149 @@
+/* --- ABOUT PAGE SPECIFIC STYLES --- */
+
+/* Global sizing reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-background-main);
+    color: var(--color-text-dark);
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.about-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.page-intro {
+    margin-bottom: 2rem;
+}
+
+/* Logo and Header */
+
+.site-header {
+    padding: 1.5rem 1rem;
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.site-logo {
+    max-width: 100px;
+    margin-bottom: 1rem;
+}
+
+.main-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--color-primary-green);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Card Styling for Content */
+.info-card {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    text-align: left;
+    border-top: 5px solid var(--color-accent-green);
+    width: 100%;
+}
+
+.block-heading {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--color-primary-green);
+    margin-bottom: 1.2rem;
+}
+
+.story-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+/* Quote styling */
+.highlight-quote {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--color-accent-green);
+    background-color: var(--color-background-main);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--color-primary-green);
+}
+
+.divider {
+    font-size: 1.5rem;
+    margin: 2rem 0;
+    color: var(--color-accent-green);
+}
+
+/* CTA Banner */
+.cta-banner {
+    margin: 4rem 0;
+}
+
+.cta-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap; /* Prevents overflow */
+}
+
+/* Button variants to match index.php */
+.btn {
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--color-accent-green);
+    color: white;
+}
+
+.btn-outline {
+    border: 2px solid var(--color-primary-green);
+    color: var(--color-primary-green);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.site-footer {
+    width: 100%;
+}
