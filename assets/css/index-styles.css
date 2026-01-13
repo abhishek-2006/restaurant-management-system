@@ -109,6 +109,66 @@ body {
     border-bottom: 2px solid #a7f3d0;
 }
 
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-auth-btns {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.nav-btn {
+    padding: 8px 20px;
+    border-radius: 50px; /* Matching your .btn style */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Login Button: Outline Style */
+.login-btn {
+    border: 2px solid var(--color-text-light);
+    color: var(--color-text-light);
+}
+
+.login-btn:hover, .login-btn.active-btn {
+    background-color: var(--color-text-light);
+    color: var(--color-primary-green);
+}
+
+/* Register Button: Solid Style */
+.register-btn {
+    background-color: var(--color-accent-green);
+    color: white;
+    border: 2px solid var(--color-accent-green);
+}
+
+.register-btn:hover {
+    background-color: #45a049; /* Darker green */
+    border-color: #45a049;
+    transform: translateY(-2px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+    .main-nav {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+        width: 100%;
+    }
+    
+    .nav-auth-btns {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 /* --- MAIN WRAPPER & HERO --- */
 .home-wrapper {
     max-width: 100%;

@@ -1,10 +1,24 @@
 <?php
-include 'config.php';
+require 'config.php';
+
+// 1. Redirect to login if not authenticated
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php?msg=login_required");
+    exit();
+}
+
 $message = "";
 $message_class = "";
 $activePage = 'reservation';
+$user_id = $_SESSION['user_id'];
+
+// 2. Pre-fetch user details for the form
+$stmt = $dbh->prepare("SELECT full_name, email, phone FROM users WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect data - using session-linked user_id for security
     $name = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
     $phone = htmlspecialchars(trim($_POST['phone']));
@@ -17,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message_class = "error";
     } else {
         try {
+            // Check availability
             $stmt = $dbh->prepare("SELECT total_tables FROM settings WHERE id=1");
             $stmt->execute();
             $total_tables = $stmt->fetchColumn();
@@ -29,9 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $message = "Sorry, all tables are booked for this slot.";
                 $message_class = "error";
             } else {
-                $stmt = $dbh->prepare("INSERT INTO reservations (name, email, phone, guests, reservation_date, reservation_time) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$name, $email, $phone, $guests, $date, $time]);
-                $message = "Table successfully reserved!";
+                // 3. Insert reservation WITH user_id
+                $stmt = $dbh->prepare("INSERT INTO reservations (user_id, name, email, phone, guests, reservation_date, reservation_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$user_id, $name, $email, $phone, $guests, $date, $time]);
+                $message = "Table successfully reserved! View it in your dashboard.";
                 $message_class = "success";
             }
         } catch (PDOException $e) {
@@ -71,17 +87,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="post" class="reservation-form">
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" value="<?php echo htmlspecialchars($user['full_name']); ?>" required>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                        <input type="email" id="email" name="email" placeholder="email@example.com" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Phone number" required>
+                        <input type="tel" id="phone" name="phone" placeholder="Phone number" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                     </div>
                 </div>
                 

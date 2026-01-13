@@ -1,0 +1,54 @@
+/* --- Header Button Styles (Logged In State) --- */
+
+.dashboard-btn {
+    background-color: var(--color-accent-green); /* #4caf50 */
+    color: white;
+    border: 2px solid var(--color-accent-green);
+}
+
+.dashboard-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.logout-btn {
+    border: 2px solid #e63946; /* Red for logout/warning action */
+    color: #e63946;
+    background: transparent;
+}
+
+.logout-btn:hover {
+    background-color: #e63946;
+    color: white;
+}
+
+/* --- Dashboard Layout --- */
+
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Main content and Sidebar */
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Card Styling */
+.dashboard-card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-top: 5px solid var(--color-primary-green);
+}
+
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Stacks on tablet/mobile */
+    }
+}

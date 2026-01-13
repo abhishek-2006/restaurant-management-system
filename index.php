@@ -1,4 +1,7 @@
-<?php $activePage = 'home'; ?>
+<?php 
+$activePage = 'home';
+require 'config.php';
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

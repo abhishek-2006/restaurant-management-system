@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+require 'config.php';
 $activePage = 'menu';
 
 // Fetch all menu items from the 'menu' table

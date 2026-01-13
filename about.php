@@ -1,4 +1,7 @@
-<?php $activePage = 'about'; ?>
+<?php 
+$activePage = 'about';
+require 'config.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
