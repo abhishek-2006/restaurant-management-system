@@ -1,7 +1,7 @@
-/* --- RESERVATION PAGE SPECIFIC STYLES --- */
+/* --- RESERVATION PAGE STYLES --- */
 
 * {
-    box-sizing: border-box; /* Crucial for preventing overflow */
+    box-sizing: border-box;
 }
 
 .reservation-wrapper {
@@ -35,12 +35,12 @@
 
 .form-row {
     display: flex;
-    flex-wrap: wrap; /* Structurally removes horizontal overflow */
+    flex-wrap: wrap;
     gap: 1.5rem;
 }
 
 .form-row .form-group {
-    flex: 1 1 250px; /* Allows fields to grow or stack based on screen size */
+    flex: 1 1 250px;
 }
 
 .form-group {

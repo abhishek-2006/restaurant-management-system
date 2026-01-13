@@ -1,4 +1,4 @@
-/* --- CONTACT PAGE SPECIFIC STYLES --- */
+/* --- CONTACT PAGE STYLES --- */
 
 /* Structural reset */
 * {
@@ -22,13 +22,13 @@
 /* Flexbox Grid for Contact Page */
 .contact-grid {
     display: flex;
-    flex-wrap: wrap; /* Prevents overflow by stacking on mobile */
+    flex-wrap: wrap;
     gap: 2rem;
     text-align: left;
 }
 
 .contact-info, .contact-form-container {
-    flex: 1 1 400px; /* Minimum width of 400px before stacking */
+    flex: 1 1 400px;
 }
 
 /* Card Styling */

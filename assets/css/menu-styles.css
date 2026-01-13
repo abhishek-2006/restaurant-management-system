@@ -1,4 +1,4 @@
-/* --- MENU PAGE SPECIFIC STYLES --- */
+/* --- MENU PAGE STYLES --- */
 
 /* Reset and Layout */
 * {
@@ -117,6 +117,49 @@
     border-radius: 50px;
     border: 2px solid var(--color-primary-green);
     font-family: var(--font-body);
+}
+
+.menu-cta-banner {
+    background-color: #f0f7f0;
+    padding: 60px 20px;
+    text-align: center;
+    margin-top: 4rem;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.cta-content h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-primary-green);
+    margin-bottom: 10px;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.menu-cta-banner .btn-primary {
+    background-color: var(--color-accent-green);
+    color: white;
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    transition: transform 0.3s, background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.menu-cta-banner .btn-primary:hover {
+    background-color: var(--color-primary-green);
+    transform: translateY(-3px);
 }
 
 .category-filters {

@@ -1,3 +1,4 @@
+<?php $activePage = 'about'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,21 +11,7 @@
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-container">
-            <div class="logo-area">
-                <img src="assets/img/logo.png" alt="GreenLeaf Logo" class="main-logo">
-                <h1 class="brand-name">GreenLeaf</h1>
-            </div>
-            <nav class="main-nav">
-                <a href="index.php">Home</a>
-                <a href="about.php" class="active">About</a>
-                <a href="menu.php">Menu</a>
-                <a href="reservation.php">Reserve Table</a>
-                <a href="contact.php">Contact Us</a>
-            </nav>
-        </div>
-    </header>
+    <?php include 'header.php'; ?>
 
     <div class="about-wrapper">
         <header class="page-intro">
@@ -60,10 +47,7 @@
         </section>
     </div>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 GreenLeaf Veg Restaurant</p>
-        <p class="footer-tagline">Pure Veg · Multi-Cuisine · Authentic Taste</p>
-    </footer>
+    <?php include 'footer.php'; ?>
 
 </body>
 </html>

@@ -48,7 +48,7 @@ body {
 }
 
 .main-logo {
-    height: 50px; /* Adjust size as needed */
+    height: 70px;
     width: auto;
 }
 
@@ -60,9 +60,9 @@ body {
 
 .main-nav {
     display: flex;
-    flex-wrap: wrap; /* Prevents overflow on mobile */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 14px;
 }
 
 .main-nav a {

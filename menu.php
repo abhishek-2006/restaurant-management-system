@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+$activePage = 'menu';
 
 // Fetch all menu items from the 'menu' table
 try {
@@ -26,21 +27,7 @@ foreach ($all_menu_items as $item) {
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-container">
-            <div class="logo-area">
-                <img src="assets/img/logo.png" alt="GreenLeaf Logo" class="main-logo">
-                <h1 class="brand-name">GreenLeaf</h1>
-            </div>
-            <nav class="main-nav">
-                <a href="index.php">Home</a>
-                <a href="about.php">About</a>
-                <a href="menu.php" class="active">Menu</a>
-                <a href="reservation.php">Reserve Table</a>
-                <a href="contact.php">Contact Us</a>
-            </nav>
-        </div>
-    </header>
+    <?php include 'header.php'; ?>
 
     <div class="menu-controls">
         <input type="text" id="menuSearch" placeholder="Search for a dish..." onkeyup="filterMenu()">
@@ -88,10 +75,15 @@ foreach ($all_menu_items as $item) {
         </main>
     </div>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 GreenLeaf Veg Restaurant</p>
-        <p class="footer-tagline">Pure Veg · Multi-Cuisine · Authentic Taste</p>
-    </footer>
+    <section class="menu-cta-banner">
+        <div class="cta-content">
+            <h2>Craving these flavors?</h2>
+            <p>Don't wait in line. Reserve your spot now for an unforgettable meal.</p>
+            <a href="reservation.php" class="btn btn-primary">Book Your Table Now</a>
+        </div>
+    </section>
+
+    <?php include 'footer.php'; ?>
 
     <script>
         function filterMenu() {

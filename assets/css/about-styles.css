@@ -1,4 +1,4 @@
-/* --- ABOUT PAGE SPECIFIC STYLES --- */
+/* --- ABOUT PAGE STYLES --- */
 
 /* Global sizing reset */
 * {
@@ -29,28 +29,6 @@ body {
 }
 
 /* Logo and Header */
-
-.site-header {
-    padding: 1.5rem 1rem;
-    background-color: var(--color-primary-green);
-    color: var(--color-text-light);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.header-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.site-logo {
-    max-width: 100px;
-    margin-bottom: 1rem;
-}
-
 .main-title {
     font-family: var(--font-display);
     font-size: 2.5rem;
