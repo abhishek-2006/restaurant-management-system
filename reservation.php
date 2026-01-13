@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <input type="date" id="date" name="date" required>
+                        <input type="date" id="date" name="date" min="<?php echo date('Y-m-d'); ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="time">Time</label>
@@ -101,10 +101,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="number" id="guests" name="guests" required min="1" max="20">
                 </div>
 
-                <button type="submit" class="submit-btn">Confirm Reservation</button>
+                <button type="submit" id="reserveBtn" class="submit-btn">
+                    <span id="btnText">Confirm Reservation</span>
+                    <span id="btnLoader" style="display:none;">🌿 Processing...</span>
+                </button>
             </form>
         </main>
     </div>
+
+    <script>
+        document.querySelector('.reservation-form').onsubmit = function() {
+            document.getElementById('btnText').style.display = 'none';
+            document.getElementById('btnLoader').style.display = 'inline';
+            document.getElementById('reserveBtn').disabled = true;
+        };
+    </script>
 
     <?php include 'footer.php'; ?>
 

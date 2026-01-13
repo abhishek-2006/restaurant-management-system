@@ -36,17 +36,36 @@
                 <p class="story-text">Our philosophy is simple: <strong>Purity and Flavor</strong>. We use only the freshest vegetables, pure ghee, and traditional hand-ground spices.</p>
                 <p class="story-text">Sustainability is at our core. We honor the spirit of vegetarian cooking by bringing the best of nature directly to your table.</p>
             </section>
-        </main>
 
-        <section class="cta-banner">
-            <h2 class="cta-title">Ready to Taste the Freshness?</h2>
-            <div class="cta-buttons">
-                <a href="menu.php" class="btn btn-primary">View Menu</a> 
-                <a href="reservation.php" class="btn btn-outline">Book a Table</a>
+            <section class="gallery-section">
+                <h2 class="block-heading">View Our Space</h2>
+                <div class="gallery-grid">
+                    <img src="assets/img/interior1.png" alt="Dining Area" onclick="openLightbox(this.src)">
+                    <img src="assets/img/interior2.png" alt="Kitchen" onclick="openLightbox(this.src)">
+                    <img src="assets/img/interior3.png" alt="Decor" onclick="openLightbox(this.src)">
+                </div>
+            </section>
+
+            <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
+                <img id="lightboxImg">
             </div>
-        </section>
+
+            <section class="cta-banner">
+                <h2 class="cta-title">Ready to Taste the Freshness?</h2>
+                <div class="cta-buttons">
+                    <a href="menu.php" class="btn btn-primary">View Menu</a> 
+                    <a href="reservation.php" class="btn btn-outline">Book a Table</a>
+                </div>
+            </section>
+        </main>
     </div>
 
+    <script>
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+    </script>
     <?php include 'footer.php'; ?>
 
 </body>
