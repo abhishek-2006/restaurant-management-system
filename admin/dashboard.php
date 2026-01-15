@@ -4,7 +4,7 @@ $activePage = 'dashboard';
 
 // Strict Admin-only access
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../login.php?msg=admin_only");
+    header("Location: index.php");
     exit();
 }
 
@@ -14,8 +14,13 @@ try {
     $total_users = $dbh->query("SELECT COUNT(*) FROM users WHERE role='guest'")->fetchColumn();
     $total_menu = $dbh->query("SELECT COUNT(*) FROM menu")->fetchColumn();
     
-    // Fetch 5 most recent reservations
-    $recent_stmt = $dbh->prepare("SELECT * FROM reservations ORDER BY created_at DESC");
+    $today_date = date('Y-m-d');
+    $stmt_today = $dbh->prepare("SELECT COUNT(*) FROM reservations WHERE reservation_date = ?");
+    $stmt_today->execute([$today_date]);
+    $new_today = $stmt_today->fetchColumn();
+    $new_users = $dbh->query("SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL 1 DAY")->fetchColumn();
+    
+    $recent_stmt = $dbh->prepare("SELECT * FROM reservations ORDER BY created_at DESC LIMIT 5");
     $recent_stmt->execute();
     $recent_bookings = $recent_stmt->fetchAll();
 } catch (PDOException $e) {
@@ -46,17 +51,41 @@ try {
             </header>
 
             <div class="stats-grid">
-                <div class="stat-card">
-                    <h3><?php echo $total_res; ?></h3>
-                    <p>Total Reservations</p>
+                <div class="stat-card glass-morph">
+                    <div class="stat-header">
+                        <div class="icon-box res-bg">📅</div>
+                        <?php if($new_today > 0): ?>
+                            <span class="trend-badge positive">+<?php echo $new_today; ?> Today</span>
+                        <?php else: ?>
+                            <span class="trend-badge neutral">No new bookings</span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="stat-content">
+                        <h2 class="stat-number"><?php echo number_format($total_res); ?></h2>
+                        <p class="stat-label">Total Reservations</p>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3><?php echo $total_users; ?></h3>
-                    <p>Registered Guests</p>
+                <div class="stat-card glass-morph">
+                    <div class="stat-header">
+                        <div class="icon-box user-bg">👥</div>
+                        <span class="trend-badge <?php echo ($new_users > 0) ? 'positive' : 'neutral'; ?>">
+                            <?php echo ($new_users > 0) ? "+$new_users New Guests" : "Stable"; ?>
+                        </span>
+                    </div>
+                    <div class="stat-content">
+                        <h2 class="stat-number"><?php echo number_format($total_users); ?></h2>
+                        <p class="stat-label">Registered Members</p>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3><?php echo $total_menu; ?></h3>
-                    <p>Menu Items</p>
+                <div class="stat-card glass-morph">
+                    <div class="stat-header">
+                        <div class="icon-box menu-bg">🍛</div>
+                        <a href="manage-menu.php" class="quick-action-link">Update Menu &rarr;</a>
+                    </div>
+                    <div class="stat-content">
+                        <h2 class="stat-number"><?php echo $total_menu; ?></h2>
+                        <p class="stat-label">Live Dishes</p>
+                    </div>
                 </div>
             </div>
 

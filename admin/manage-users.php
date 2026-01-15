@@ -79,7 +79,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td>
                                     <?php if($user['user_id'] != $_SESSION['user_id']): ?>
                                         <a href="?delete=<?php echo $user['user_id']; ?>" 
-                                           style="color:#ef4444; text-decoration:none;" 
+                                           class="delete-btn"
                                            onclick="return confirm('Permanently delete this user?')">Delete</a>
                                     <?php else: ?>
                                         <span style="color:#94a3b8;">(Current Admin)</span>

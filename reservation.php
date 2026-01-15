@@ -1,7 +1,6 @@
 <?php
 require 'config.php';
 
-// 1. Redirect to login if not authenticated
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php?msg=login_required");
     exit();
@@ -12,13 +11,11 @@ $message_class = "";
 $activePage = 'reservation';
 $user_id = $_SESSION['user_id'];
 
-// 2. Pre-fetch user details for the form
 $stmt = $dbh->prepare("SELECT full_name, email, phone FROM users WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect data - using session-linked user_id for security
     $name = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
     $phone = htmlspecialchars(trim($_POST['phone']));
@@ -36,7 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
             $total_tables = $stmt->fetchColumn();
 
-            $stmt = $dbh->prepare("SELECT COUNT(*) FROM reservations WHERE reservation_date=? AND reservation_time=?");
+            $stmt = $dbh->prepare("SELECT COUNT(*) FROM reservations 
+                                WHERE reservation_date = ? 
+                                AND reservation_time = ? 
+                                AND status IN ('pending', 'ongoing')");
             $stmt->execute([$date, $time]);
             $booked_tables = $stmt->fetchColumn();
 

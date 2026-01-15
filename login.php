@@ -10,11 +10,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['user_name'] = $user['full_name'];
-        $_SESSION['role'] = $user['role'];
-        header("Location: dashboard.php");
-        exit();
+        if ($user['role'] === 'guest') {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['user_name'] = $user['full_name'];
+            $_SESSION['role'] = $user['role'];
+            header("Location: dashboard.php");
+            exit();
+        } elseif ($user['role'] === 'admin') {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['user_name'] = $user['full_name'];
+            $_SESSION['role'] = $user['role'];
+            header("Location: admin/index.php");
+            exit();
+        }
     } else {
         $error = "Invalid email or password.";
     }

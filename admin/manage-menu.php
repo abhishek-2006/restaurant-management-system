@@ -26,11 +26,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_item'])) {
     $description = htmlspecialchars(trim($_POST['description']));
 
     $stmt = $dbh->prepare("INSERT INTO menu (name, category, price, description) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$name, $category, $price, $description]);
-    $message = "New dish added to the menu!";
+    try {
+        $stmt->execute([$name, $category, $price, $description]);
+        $message = "New dish added successfully!";
+    } catch (PDOException $e) {
+        if ($e->getCode() == 23000) {
+            $message = "Error: A dish with this name already exists.";
+        } else {
+            $message = "Database error occurred.";
+        }
+    }
 }
 
-// Fetch all menu items grouped by category
 $stmt = $dbh->query("SELECT category, id, name, price, description FROM menu ORDER BY category, name");
 $menu_items = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 ?>
@@ -38,16 +45,10 @@ $menu_items = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Menu | GreenLeaf Admin</title>
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
-    <link rel="stylesheet" href="assets/css/admin-styles.css">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"> <link rel="stylesheet" href="assets/css/admin-styles.css">
     <link rel="stylesheet" href="assets/css/index-styles.css">
-    <style>
-        .menu-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
-        .form-card { position: sticky; top: 30px; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; background: #e2e8f0; }
-        .delete-btn { color: #ef4444; text-decoration: none; font-weight: bold; }
-    </style>
 </head>
 <body class="admin-body">
     <div class="admin-container">
@@ -55,66 +56,89 @@ $menu_items = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 
         <main class="admin-main">
             <header class="admin-header">
-                <h2>Menu Management</h2>
-                <?php if($message): ?> <div class="badge" style="background:#dcfce7; color:#166534;"><?php echo $message; ?></div> <?php endif; ?>
+                <div class="header-title">
+                    <h2>Menu Management</h2>
+                    <p class="subtitle">Curate your restaurant's culinary offerings</p>
+                </div>
+                <?php if($message): ?> 
+                    <div class="trend-badge positive" style="padding: 10px 20px; font-size: 0.9rem;">
+                        ✨ <?php echo $message; ?>
+                    </div> 
+                <?php endif; ?>
             </header>
 
             <div class="menu-grid">
-                <section class="admin-card form-card">
-                    <h3>Add New Dish</h3>
-                    <form method="POST" style="margin-top:15px;">
+                <section class="admin-card glass-morph form-card">
+                    <div class="card-header">
+                        <h3 style="margin:0;">Add New Dish</h3>
+                    </div>
+                    <form method="POST" style="margin-top:20px;">
                         <div class="form-group">
-                            <label>Dish Name</label>
-                            <input type="text" name="name" required>
+                            <label for="dish-name">Dish Name</label>
+                            <input type="text" id="dish-name" name="name" placeholder="e.g. Paneer Lababdar" required>
                         </div>
                         <div class="form-group">
-                            <label>Category</label>
-                            <select name="category" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                                <option value="North Indian">North Indian</option>
-                                <option value="Italian">Italian</option>
-                                <option value="Beverages">Beverages</option>
-                                <option value="Desserts">Desserts</option>
+                            <label for="menu-category">Menu Category</label>
+                            <select name="category" id="menu-category" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <?php foreach (array_keys($menu_items) as $category): ?>
+                                    <option value="<?php echo htmlspecialchars($category); ?>"><?php echo htmlspecialchars($category); ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Price (₹)</label>
-                            <input type="number" name="price" step="0.01" required>
+                            <label for="dish-price">Pricing (₹)</label>
+                            <input type="number" name="price" id="dish-price" step="0.01" placeholder="0.00" required>
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="description" rows="3" style="width:100%; border-radius:8px; border:1px solid #ddd; padding:10px;"></textarea>
+                            <label for="dish-description">Dish Description</label>
+                            <textarea name="description" id="dish-description" rows="4" placeholder="Describe the flavors and ingredients..." style="width:100%; border-radius:12px; border:2px solid #e2e8f0; padding:12px; background:rgba(255,255,255,0.8);"></textarea>
                         </div>
-                        <button type="submit" name="add_item" class="admin-login-btn">Add to Menu</button>
+                        <button type="submit" name="add_item" class="admin-login-btn" style="width:100%; margin-top:10px;">Deploy to Menu</button>
                     </form>
                 </section>
 
-                <section class="admin-card">
-                    <h3>Current Menu</h3>
+                <section class="admin-card glass-morph">
+                    <div class="card-header">
+                        <h3 style="margin:0;">Current Menu Intelligence</h3>
+                    </div>
+                    
                     <?php foreach ($menu_items as $category => $items): ?>
-                        <h4 style="margin-top:20px; color:var(--primary-green); border-bottom:1px solid #eee;"><?php echo $category; ?></h4>
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Dish</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($items as $item): ?>
-                                <tr>
-                                    <td>
-                                        <strong><?php echo $item['name']; ?></strong><br>
-                                        <small style="color:666;"><?php echo $item['description']; ?></small>
-                                    </td>
-                                    <td>₹<?php echo number_format($item['price'], 2); ?></td>
-                                    <td>
-                                        <a href="?delete=<?php echo $item['id']; ?>" class="delete-btn" onclick="return confirm('Remove this dish?')">Delete</a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                        <div class="category-block" style="margin-top:30px;">
+                            <h4 class="category-label" style="display:inline-block; background:var(--primary-green); color:white; padding:5px 15px; border-radius:50px; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:15px;">
+                                <?php echo htmlspecialchars($category); ?>
+                            </h4>
+                            
+                            <div class="table-responsive">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dish Specification</th>
+                                            <th style="width:100px;">Price</th>
+                                            <th style="text-align: right;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($items as $item): ?>
+                                        <tr class="table-row-hover">
+                                            <td>
+                                                <div style="font-weight: 700; color: var(--sidebar-bg);"><?php echo htmlspecialchars($item['name']); ?></div>
+                                                <div style="font-size: 0.8rem; color: var(--text-muted); line-height:1.4;"><?php echo htmlspecialchars($item['description']); ?></div>
+                                            </td>
+                                            <td>
+                                                <span style="font-weight: 700; color: var(--primary-green);">₹<?php echo number_format($item['price'], 2); ?></span>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <a href="?delete=<?php echo $item['id']; ?>" class="delete-btn" onclick="return confirm('Archive this dish? This will remove it from the public menu.')" >
+                                                   Remove
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     <?php endforeach; ?>
                 </section>
             </div>
