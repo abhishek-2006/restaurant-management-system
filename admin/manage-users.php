@@ -7,6 +7,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+if (isset($_GET['ban_id'])) {
+    $target_id = intval($_GET['ban_id']);
+    $stmt = $dbh->prepare("UPDATE users SET role = IF(role='banned', 'guest', 'banned') WHERE user_id = ? AND role != 'admin'");
+    $stmt->execute([$target_id]);
+    header("Location: manage-users.php");
+    exit();
+}
+
 $message = "";
 
 // Handle Delete User
@@ -66,26 +74,30 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </thead>
                         <tbody>
                             <?php foreach ($users as $user): ?>
-                            <tr>
-                                <td><strong><?php echo htmlspecialchars($user['full_name']); ?></strong></td>
-                                <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
-                                <td>
-                                    <span class="badge" style="background: <?php echo ($user['role'] == 'admin') ? '#dbeafe' : '#f1f5f9'; ?>; color: <?php echo ($user['role'] == 'admin') ? '#1e40af' : '#475569'; ?>;">
-                                        <?php echo ucfirst($user['role']); ?>
-                                    </span>
-                                </td>
-                                <td><small><?php echo date('M j, Y', strtotime($user['created_at'])); ?></small></td>
-                                <td>
-                                    <?php if($user['user_id'] != $_SESSION['user_id']): ?>
-                                        <a href="?delete=<?php echo $user['user_id']; ?>" 
-                                           class="delete-btn"
-                                           onclick="return confirm('Permanently delete this user?')">Delete</a>
-                                    <?php else: ?>
-                                        <span style="color:#94a3b8;">(Current Admin)</span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td><strong><?php echo htmlspecialchars($user['full_name']); ?></strong></td>
+                                    <td><?php echo htmlspecialchars($user['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($user['phone'] ?? 'N/A'); ?></td>
+                                    <td>
+                                        <span class="badge <?php echo ($user['role'] == 'banned') ? 'badge-danger' : 'badge-success'; ?>">
+                                            <?php echo ucfirst($user['role']); ?>
+                                        </span>
+                                    </td>
+                                    <td><small><?php echo date('M j, Y', strtotime($user['created_at'])); ?></small></td>
+                                    <td>
+                                        <?php if($user['role'] !== 'admin'): ?>
+                                            <a href="?ban_id=<?php echo $user['user_id']; ?>" 
+                                                class="action-btn <?php echo ($user['role'] == 'banned') ? 'unban' : 'ban'; ?>">
+                                            <?php echo ($user['role'] == 'banned') ? 'Unban' : 'Ban User'; ?>
+                                            </a>
+                                            <a href="?delete=<?php echo $user['user_id']; ?>" 
+                                            class="delete-btn"
+                                            onclick="return confirm('Permanently delete this user?')">Delete</a>
+                                        <?php else: ?>
+                                            <span style="color:#94a3b8;">(Current Admin)</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

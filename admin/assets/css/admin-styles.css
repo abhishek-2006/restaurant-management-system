@@ -279,6 +279,8 @@
     color: var(--text-muted);
     background: #f1f5f9;
     padding: 16px;
+    border-bottom: 20px solid #215ead;
+    text-align: center;
 }
 
 .admin-table td {
@@ -446,6 +448,7 @@
 .badge-ongoing { background: #dbeafe; color: #1e40af; }
 .badge-completed { background: #dcfce7; color: #166534; }
 .badge-cancelled { background: #fee2e2; color: #991b1b; }
+.badge-danger { background: #fee2e2; color: #991b1b; }
 
 .action-btn { 
     padding: 5px 10px; 
@@ -453,7 +456,11 @@
     text-decoration: none; 
     font-size: 0.8rem; 
     font-weight: bold;
+    transition: all 0.3s ease;
+    justify-content: center;
 }
+.action-btn.ban { background: #fee2e2; color: #b91c1c; padding: 5px 10px; border-radius: 6px; margin-right: 8px;}
+.action-btn.unban { background: #dcfce7; color: #166534; padding: 5px 10px; border-radius: 6px; margin-right: 8px;}
 .checkin { background: #1e40af; color: white; }
 .complete { background: #166534; color: white; }
 

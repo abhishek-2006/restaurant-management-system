@@ -40,11 +40,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute([$date, $time]);
             $booked_tables = $stmt->fetchColumn();
 
+            $user_id = $_SESSION['user_id'];
+            $stmt = $dbh->prepare("SELECT role FROM users WHERE user_id = ?");
+            $stmt->execute([$user_id]);
+            $user_role = $stmt->fetchColumn();
+
+            if ($user_role === 'banned') {
+                $message = "Your account has been restricted. You are no longer permitted to make reservations.";
+                $message_class = "error";
+                $is_banned = true; 
+            }
+
             if ($booked_tables >= $total_tables) {
                 $message = "Sorry, all tables are booked for this slot.";
                 $message_class = "error";
             } else {
-                // 3. Insert reservation WITH user_id
                 $stmt = $dbh->prepare("INSERT INTO reservations (user_id, name, email, phone, guests, reservation_date, reservation_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$user_id, $name, $email, $phone, $guests, $date, $time]);
                 $message = "Table successfully reserved! View it in your dashboard.";

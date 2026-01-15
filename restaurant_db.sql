@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 15, 2026 at 12:17 PM
+-- Generation Time: Jan 15, 2026 at 12:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -120,8 +120,8 @@ CREATE TABLE `reservations` (
   `reservation_date` date NOT NULL,
   `reservation_time` varchar(5) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `status` enum('pending','ongoing','completed','cancelled') DEFAULT 'pending',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` enum('pending','ongoing','completed','cancelled') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -129,7 +129,7 @@ CREATE TABLE `reservations` (
 --
 
 INSERT INTO `reservations` (`id`, `name`, `email`, `phone`, `guests`, `reservation_date`, `reservation_time`, `user_id`, `created_at`, `status`) VALUES
-(1, 'Test', 'test@gmail.com', '1234567890', 2, '2026-01-15', '16:30', 1, '2026-01-15 11:05:53', 'ongoing');
+(5, 'Abhishek', 'test@gmail.com', '1234567890', 2, '2026-01-15', '16:30', 1, '2026-01-15 11:05:53', 'ongoing');
 
 -- --------------------------------------------------------
 
@@ -162,7 +162,7 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('guest','admin') DEFAULT 'guest',
+  `role` enum('guest','admin','banned') DEFAULT 'guest',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -172,7 +172,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `full_name`, `email`, `phone`, `password`, `role`, `created_at`) VALUES
 (1, 'Abhishek', 'test@gmail.com', '1234567890', '$2y$10$Hg6q8tFQdeUIIU2OcaH.quk6DXzJPJnv9vzJ8y34s8Ez.WyaWgpIe', 'guest', '2026-01-13 10:41:34'),
-(2, 'System Admin', 'admin@greenleaf.com', '9876543210', '$2y$10$BArOzIHGHvZiVIseJ/lokuWLkG5VJ0Yjnw0v/xqgx6X7xhn.5vUjS', 'admin', '2026-01-14 03:25:45');
+(2, 'System Admin', 'admin@greenleaf.com', '9876543210', '$2y$10$BArOzIHGHvZiVIseJ/lokuWLkG5VJ0Yjnw0v/xqgx6X7xhn.5vUjS', 'admin', '2026-01-14 03:25:45'),
+(3, 'Test', 'test1@gmail.com', '0123456789', '$2y$10$Hg6q8tFQdeUIIU2OcaH.quk6DXzJPJnv9vzJ8y34s8Ez.WyaWgpIe', 'banned', '2026-01-15 11:23:22');
 
 --
 -- Indexes for dumped tables
@@ -247,7 +248,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
