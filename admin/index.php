@@ -47,38 +47,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | GreenLeaf</title>
+    <title>Secure Admin Access | GreenLeaf</title>
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
     <link rel="stylesheet" href="assets/css/index-styles.css">
 </head>
 <body class="admin-login-body">
-
     <div class="login-container">
-        <div class="login-box">
-            <img src="assets/img/logo.png" alt="GreenLeaf Logo" class="login-logo">
-            
-            <h2 class="login-title">Admin Access</h2>
-            <p class="login-subtitle">Secure management portal</p>
+        <div class="login-box animate-in">
+            <div class="login-header">
+                <img src="assets/img/logo.png" alt="GreenLeaf Logo" class="login-logo">
+                <h2 class="login-title">Admin Portal</h2>
+                <p class="login-subtitle">Please enter your credentials to manage GreenLeaf.</p>
+            </div>
 
             <?php if($error): ?>
-                <div class="error-msg"><?php echo $error; ?></div>
+                <div class="error-msg">
+                    <span class="icon">⚠️</span> <?php echo $error; ?>
+                </div>
             <?php endif; ?>
 
             <form method="POST" class="login-form">
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" name="email" placeholder="admin@greenleaf.com" required>
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="admin@example.com" required autofocus>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" placeholder="••••••••" required>
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
                 </div>
-                <button type="submit" class="login-btn">Sign In</button>
+                <button type="submit" class="login-btn">
+                    Authorize & Sign In
+                </button>
             </form>
-            
-            <a href="../index.php" class="back-home">← Back to Site</a>
+            <div class="login-footer">
+                <a href="../index.php" class="back-home">← Return to Public Site</a>
+            </div>
         </div>
+        <p class="copyright-text">&copy; 2026 GreenLeaf Management System</p>
     </div>
-
 </body>
 </html>

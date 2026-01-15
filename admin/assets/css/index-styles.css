@@ -1,9 +1,10 @@
-/* admin/index-styles.css */
-
 :root {
-    --admin-dark: #1e293b;
-    --admin-green: #2e7d32;
-    --text-white: #ffffff;
+    --admin-dark-bg: #0f172a;
+    --admin-card-bg: rgba(255, 255, 255, 0.95);
+    --admin-green-primary: #15803d;
+    --admin-green-hover: #166534;
+    --text-slate: #64748b;
+    --error-red: #ef4444;
 }
 
 * {
@@ -13,7 +14,9 @@
 }
 
 .admin-login-body {
-    background-color: var(--admin-dark);
+    background: var(--admin-dark-bg);
+    background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size: 40px 40px;
     font-family: 'Inter', sans-serif;
     display: flex;
     justify-content: center;
@@ -23,85 +26,142 @@
 
 .login-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     padding: 20px;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .login-box {
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: var(--admin-card-bg);
+    margin-top: 120px;
+    padding: 40px 40px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
 }
 
+.animate-in {
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .login-logo {
-    height: 80px;
-    margin-bottom: 20px;
+    height: 100px;
+    width: auto;
+    margin-bottom: 25px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
 }
 
 .login-title {
-    color: var(--admin-dark);
+    color: var(--admin-dark-bg);
     font-size: 1.8rem;
-    margin-bottom: 5px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -0.025em;
 }
 
 .login-subtitle {
-    color: #64748b;
-    margin-bottom: 30px;
+    color: var(--text-slate);
+    margin-bottom: 35px;
+    font-size: 0.95rem;
 }
 
 .form-group {
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .form-group label {
-    display: block;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: var(--admin-dark);
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+    color: #334155;
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.form-group input {
+.input-wrapper input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--admin-green-primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(21, 128, 61, 0.1);
     outline: none;
 }
 
 .login-btn {
     width: 100%;
-    padding: 14px;
-    background-color: var(--admin-green);
+    padding: 16px;
+    background: var(--admin-green-primary);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
+    font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s;
+    margin-top: 15px;
+    transition: all 0.3s ease;
 }
 
 .login-btn:hover {
-    background-color: #1b5e20;
+    background: var(--admin-green-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(21, 128, 61, 0.3);
 }
 
 .error-msg {
-    background: #fee2e2;
-    color: #b91c1c;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 20px;
+    background: #fff1f2;
+    color: var(--error-red);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 25px;
     font-size: 0.9rem;
     font-weight: 600;
+    border: 1px solid #fecaca;
+}
+
+.login-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
 }
 
 .back-home {
-    display: block;
-    margin-top: 25px;
+    display: inline-block;
+    color: var(--text-slate);
     text-decoration: none;
-    color: #64748b;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.back-home:hover {
+    color: var(--admin-green-primary);
+}
+
+.copyright-text {
+    margin-top: 25px;
+    color: #475569;
+    font-size: 0.8rem;
+    text-align: center;
 }

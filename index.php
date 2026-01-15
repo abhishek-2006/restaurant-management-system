@@ -72,8 +72,6 @@ require 'config.php';
             </div>
         </section>
     </main>
-
     <?php include 'footer.php'; ?>
-
 </body>
 </html>
