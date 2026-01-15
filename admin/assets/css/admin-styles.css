@@ -20,7 +20,7 @@
     height: 100vh;
 }
 
-.sidebar-logo { height: 40px; margin-bottom: 10px; }
+.sidebar-logo { height: 120px; width: auto;  margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
 
 .sidebar-nav a {
     display: block;
@@ -35,6 +35,47 @@
 .sidebar-nav a:hover, .sidebar-nav a.active {
     background: var(--primary-green);
     color: white;
+}
+
+.nav-btn {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+.nav-btn:hover {
+    background: #256d27;
+}
+
+logout-link {
+    display: block;
+    color: #f87171;
+    padding: 12px 15px;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+.logout-link:hover {
+    background: #b91c1c;
+    color: white;
+}
+.logout-btn {
+    background: #f87171;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+.logout-btn:hover {
+    background: #b91c1c;
 }
 
 /* Main Content Area */
@@ -68,6 +109,17 @@
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.admin-login-btn {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
 }
 
 .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }

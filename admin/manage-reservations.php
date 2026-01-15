@@ -7,18 +7,39 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-$message = "";
+// Check total records in table (ignoring search)
+$total_count = $dbh->query("SELECT COUNT(*) FROM reservations")->fetchColumn();
 
-// Handle Delete Reservation
+$activePage = 'reservations';
+$search = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '';
+$filter_date = isset($_GET['filter_date']) ? $_GET['filter_date'] : '';
+
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
     $stmt = $dbh->prepare("DELETE FROM reservations WHERE id = ?");
     $stmt->execute([$id]);
-    $message = "Reservation removed successfully.";
+    header("Location: manage-reservations.php");
+    exit();
 }
 
-// Fetch all reservations, newest first
-$stmt = $dbh->query("SELECT * FROM reservations ORDER BY reservation_date DESC, reservation_time DESC");
+$query = "SELECT * FROM reservations WHERE 1=1";
+$params = [];
+
+if (!empty($search)) {
+    $query .= " AND (name LIKE ? OR email LIKE ? OR phone LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
+
+if (!empty($filter_date)) {
+    $query .= " AND reservation_date = ?";
+    $params[] = $filter_date;
+}
+
+$query .= " ORDER BY reservation_date DESC, reservation_time DESC";
+$stmt = $dbh->prepare($query);
+$stmt->execute($params);
 $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -32,31 +53,32 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="admin-body">
     <div class="admin-container">
-        <aside class="admin-sidebar">
-            <div class="admin-logo">
-                <img src="assets/img/logo.png" alt="Logo" class="sidebar-logo">
-                <h3>Admin Panel</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php">📊 Dashboard</a>
-                <a href="manage-reservations.php" class="active">📅 Reservations</a>
-                <a href="manage-menu.php">🍛 Menu Items</a>
-                <a href="logout.php">🚪 Logout</a>
-            </nav>
-        </aside>
+        <?php include 'sidebar.php'; ?>
 
         <main class="admin-main">
             <header class="admin-header">
                 <h2>Guest Reservations</h2>
-                <?php if($message): ?> 
-                    <div style="padding:10px; background:#dcfce7; color:#166534; border-radius:8px;">
-                        <?php echo $message; ?>
-                    </div> 
-                <?php endif; ?>
             </header>
 
+            <section class="admin-card" style="margin-bottom: 20px;">
+                <form method="GET" class="filter-form" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                        <label>Search Guest</label>
+                        <input type="text" name="search" value="<?php echo $search; ?>" placeholder="Name, Email, or Phone...">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Filter by Date</label>
+                        <input type="date" name="filter_date" value="<?php echo $filter_date; ?>">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="admin-login-btn" style="margin: 0; padding: 10px 20px;">Apply</button>
+                        <a href="manage-reservations.php" class="nav-btn logout-btn" style="padding: 10px 20px; line-height: 1.2; text-decoration: none;">Clear</a>
+                    </div>
+                </form>
+            </section>
+
             <section class="admin-card">
-                <h3>All Bookings</h3>
+                <h3>Bookings List (<?php echo count($reservations); ?>)</h3>
                 <div class="table-responsive">
                     <table class="admin-table">
                         <thead>
@@ -71,28 +93,31 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tbody>
                             <?php if($reservations): ?>
                                 <?php foreach ($reservations as $res): ?>
-                                <tr>
-                                    <td><strong><?php echo htmlspecialchars($res['name']); ?></strong></td>
-                                    <td>
-                                        <small><?php echo htmlspecialchars($res['email']); ?></small><br>
-                                        <small><?php echo htmlspecialchars($res['phone']); ?></small>
-                                    </td>
-                                    <td>
-                                        <?php echo date('D, M j, Y', strtotime($res['reservation_date'])); ?><br>
-                                        <span style="color:var(--primary-green); font-weight:bold;">
-                                            <?php echo $res['reservation_time']; ?>
-                                        </span>
-                                    </td>
-                                    <td><?php echo $res['guests']; ?> People</td>
-                                    <td>
-                                        <a href="?delete=<?php echo $res['id']; ?>" 
-                                           style="color:#ef4444; text-decoration:none;" 
-                                           onclick="return confirm('Delete this reservation?')">Cancel/Delete</a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><strong><?php echo htmlspecialchars($res['name']); ?></strong></td>
+                                        <td><?php echo htmlspecialchars($res['phone']); ?></td>
+                                        <td><?php echo $res['reservation_date']; ?> | <?php echo $res['reservation_time']; ?></td>
+                                        <td><?php echo $res['guests']; ?> Guests</td>
+                                        <td><a href="?delete=<?php echo $res['id']; ?>" class="delete-btn" onclick="return confirm('Delete?')">Cancel</a></td>
+                                    </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="5" style="text-align:center; padding:20px;">No reservations found.</td></tr>
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding: 40px;">
+                                        <?php if ($total_count == 0): ?>
+                                            <div style="color: #64748b;">
+                                                <span style="font-size: 2rem;">📭</span><br>
+                                                <strong>No reservations found in the system.</strong>
+                                            </div>
+                                        <?php else: ?>
+                                            <div style="color: #ef4444;">
+                                                <span style="font-size: 2rem;">🔍</span><br>
+                                                <strong>No matches found for your search criteria.</strong><br>
+                                                <small style="color: #64748b;">Try adjusting your filters or search terms.</small>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

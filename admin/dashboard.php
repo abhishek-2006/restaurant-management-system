@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+$activePage = 'dashboard';
 
 // Strict Admin-only access
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -34,21 +35,7 @@ try {
 <body class="admin-body">
 
     <div class="admin-container">
-        <aside class="admin-sidebar">
-            <div class="admin-logo">
-                <img src="assets/img/logo.png" alt="Logo" class="sidebar-logo">
-                <h3>GreenLeaf Admin</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="index.php" class="active">📊 Dashboard</a>
-                <a href="manage-reservations.php">📅 Reservations</a>
-                <a href="manage-menu.php">🍛 Menu Items</a>
-                <a href="manage-users.php">👥 Users</a>
-                <a href="settings.php">⚙️ Settings</a>
-                <hr>
-                <a href="logout.php" class="logout-link">🚪 Logout</a>
-            </nav>
-        </aside>
+        <?php include 'sidebar.php'; ?>
 
         <main class="admin-main">
             <header class="admin-header">

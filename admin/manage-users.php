@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
+$activePage = 'users';
 
-// Security: Admin access only
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.php");
     exit();
@@ -38,19 +38,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="admin-body">
     <div class="admin-container">
-        <aside class="admin-sidebar">
-            <div class="admin-logo">
-                <img src="assets/img/logo.png" alt="Logo" class="sidebar-logo">
-                <h3>Admin Panel</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php">📊 Dashboard</a>
-                <a href="manage-reservations.php">📅 Reservations</a>
-                <a href="manage-menu.php">🍛 Menu Items</a>
-                <a href="manage-users.php" class="active">👥 Users</a>
-                <a href="logout.php">🚪 Logout</a>
-            </nav>
-        </aside>
+        <?php include 'sidebar.php'; ?>
 
         <main class="admin-main">
             <header class="admin-header">
