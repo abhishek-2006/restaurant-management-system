@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
 
-// If already logged in as admin, skip login and go to dashboard
+// Already logged-in admin → dashboard
 if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
     header("Location: dashboard.php");
     exit();
@@ -10,22 +10,35 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin') {
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = htmlspecialchars(trim($_POST['email']));
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Verify admin credentials strictly
-    $stmt = $dbh->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
+    // Fetch user by email (ANY role)
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
+
+        $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['user_name'] = $user['full_name'];
         $_SESSION['role'] = $user['role'];
-        header("Location: dashboard.php");
-        exit();
+
+        // Role-based redirect
+        if ($user['role'] === 'admin') {
+            header("Location: dashboard.php");
+            exit();
+        } else if ($user['role'] === 'guest') {
+            header("Location: ../dashboard.php");
+            exit();
+        }
+
+    } else if ($user) {
+        // Email exists but password is wrong
+        $error = "Invalid credentials.";
     } else {
-        $error = "Access Denied: Invalid Credentials.";
+        // Email not found
+        $error = "Access denied.";
     }
 }
 ?>
@@ -35,14 +48,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | GreenLeaf</title>
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
     <link rel="stylesheet" href="assets/css/index-styles.css">
 </head>
 <body class="admin-login-body">
 
     <div class="login-container">
         <div class="login-box">
-            <img src="../assets/img/logo.png" alt="GreenLeaf Logo" class="login-logo">
+            <img src="assets/img/logo.png" alt="GreenLeaf Logo" class="login-logo">
             
             <h2 class="login-title">Admin Access</h2>
             <p class="login-subtitle">Secure management portal</p>
@@ -54,11 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST" class="login-form">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" name="email" required placeholder="admin@greenleaf.com">
+                    <input type="email" name="email" placeholder="admin@greenleaf.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" name="password" required placeholder="••••••••">
+                    <input type="password" name="password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="login-btn">Sign In</button>
             </form>
