@@ -7,6 +7,7 @@ if (isset($_COOKIE[session_name()])) {
     setcookie(session_name(), '', time()-42000, '/');
 }
 
+unset($_SESSION);
 // Destroy the session on the server
 session_destroy();
 
