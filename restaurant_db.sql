@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 15, 2026 at 12:34 PM
+-- Generation Time: Jan 16, 2026 at 09:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+05:30";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `restaurant_db`
 --
+CREATE DATABASE IF NOT EXISTS `restaurant_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `restaurant_db`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_messages`
+--
+
+CREATE TABLE `contact_messages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('unread','read','replied') DEFAULT 'unread'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contact_messages`
+--
+
+INSERT INTO `contact_messages` (`id`, `name`, `email`, `subject`, `message`, `created_at`, `status`) VALUES
+(1, 'John', 'test@gmail.com', 'feedback', 'such a awesome restaurant, interior and I&#039;ve never tasted such awesome tasty food.', '2026-01-16 08:14:08', 'unread');
 
 -- --------------------------------------------------------
 
@@ -129,7 +154,7 @@ CREATE TABLE `reservations` (
 --
 
 INSERT INTO `reservations` (`id`, `name`, `email`, `phone`, `guests`, `reservation_date`, `reservation_time`, `user_id`, `created_at`, `status`) VALUES
-(5, 'Abhishek', 'test@gmail.com', '1234567890', 2, '2026-01-15', '16:30', 1, '2026-01-15 11:05:53', 'ongoing');
+(5, 'Abhishek', 'test@gmail.com', '1234567890', 2, '2026-01-15', '16:30', 1, '2026-01-15 11:37:31', 'completed');
 
 -- --------------------------------------------------------
 
@@ -173,11 +198,17 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `full_name`, `email`, `phone`, `password`, `role`, `created_at`) VALUES
 (1, 'Abhishek', 'test@gmail.com', '1234567890', '$2y$10$Hg6q8tFQdeUIIU2OcaH.quk6DXzJPJnv9vzJ8y34s8Ez.WyaWgpIe', 'guest', '2026-01-13 10:41:34'),
 (2, 'System Admin', 'admin@greenleaf.com', '9876543210', '$2y$10$BArOzIHGHvZiVIseJ/lokuWLkG5VJ0Yjnw0v/xqgx6X7xhn.5vUjS', 'admin', '2026-01-14 03:25:45'),
-(3, 'Test', 'test1@gmail.com', '0123456789', '$2y$10$Hg6q8tFQdeUIIU2OcaH.quk6DXzJPJnv9vzJ8y34s8Ez.WyaWgpIe', 'banned', '2026-01-15 11:23:22');
+(3, 'Test', 'test1@gmail.com', '0123456789', '$2y$10$Hg6q8tFQdeUIIU2OcaH.quk6DXzJPJnv9vzJ8y34s8Ez.WyaWgpIe', 'guest', '2026-01-15 11:23:22');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `favorites`
@@ -219,6 +250,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `favorites`
