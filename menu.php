@@ -2,7 +2,7 @@
 require 'config.php';
 $activePage = 'menu';
 
-// Fetch all menu items from the 'menu' table
+// Fetch menu items - simplified query to ensure visibility
 try {
     $stmt = $dbh->query("SELECT name, description, price, category FROM menu ORDER BY category, price");
     $all_menu_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -10,6 +10,7 @@ try {
     $all_menu_items = [];
 }
 
+// Group items by category for the display loop
 $menu_categories = [];
 foreach ($all_menu_items as $item) {
     $menu_categories[$item['category']][] = $item;
@@ -25,88 +26,60 @@ foreach ($all_menu_items as $item) {
     <link rel="stylesheet" href="assets/css/index-styles.css" type="text/css">
     <link rel="stylesheet" href="assets/css/menu-styles.css" type="text/css">
 </head>
-<body>
+<body class="menu-page">
 
     <?php include 'header.php'; ?>
 
-    <div class="menu-controls">
-        <input type="text" id="menuSearch" placeholder="Search for a dish..." onkeyup="filterMenu()">
-        <div class="category-filters">
-            <button class="filter-btn active" onclick="filterCategory('all')">All</button>
-            <?php foreach(array_keys($menu_categories) as $cat): ?>
-                <button class="filter-btn" onclick="filterCategory('<?php echo htmlspecialchars($cat); ?>')">
-                    <?php echo htmlspecialchars($cat); ?>
-                </button>
-            <?php endforeach; ?>
+    <header class="menu-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="main-title">Our Menu</h1>
+            <p class="subtitle">Fresh flavors, traditional recipes</p>
         </div>
-    </div>
-    <div class="menu-wrapper">
-        <header class="page-intro">
-            <h1 class="main-title">The GreenLeaf Menu</h1>
-            <p class="subtitle">A Symphony of Spices and Freshness</p>
-        </header>
+    </header>
 
+    <div class="menu-wrapper">
         <main class="menu-content">
-            <?php foreach($menu_categories as $category_name => $items): ?>
-                <section class="menu-category-section">
-                    <h2 class="category-heading"><?php echo htmlspecialchars($category_name); ?></h2>
-                    
-                    <div class="menu-grid">
-                        <?php foreach($items as $item): ?>
-                            <div class="menu-card">
-                                <div class="card-header">
-                                    <h3 class="item-name"><?php echo htmlspecialchars($item['name']); ?></h3>
-                                    <span class="item-price">₹<?php echo number_format($item['price'], 2); ?></span>
+            <?php if (!empty($menu_categories)): ?>
+                <?php foreach($menu_categories as $category_name => $items): ?>
+                    <section class="menu-category-section">
+                        <h2 class="category-heading"><?php echo htmlspecialchars($category_name); ?></h2>
+                        
+                        <div class="menu-grid">
+                            <?php foreach($items as $item): ?>
+                                <div class="menu-card">
+                                    <div class="card-header">
+                                        <h3 class="item-name"><?php echo htmlspecialchars($item['name']); ?></h3>
+                                        <span class="item-price">₹<?php echo number_format($item['price'], 0); ?></span>
+                                    </div>
+                                    <p class="item-description">
+                                        <?php echo htmlspecialchars($item['description']); ?>
+                                    </p>
                                 </div>
-                                <p class="item-description">
-                                    <?php echo htmlspecialchars($item['description']); ?>
-                                </p>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
-            <?php endforeach; ?>
-            
-            <?php if (empty($all_menu_items)): ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <div class="empty-state">
-                    <p>No menu items found. Please check your database connection.</p>
+                    <p>No menu items found. Please ensure your "menu" table contains data.</p>
                 </div>
             <?php endif; ?>
         </main>
     </div>
 
-    <section class="menu-cta-banner">
-        <div class="cta-content">
-            <h2>Craving these flavors?</h2>
-            <p>Don't wait in line. Reserve your spot now for an unforgettable meal.</p>
-            <a href="reservation.php" class="btn btn-primary">Book Your Table Now</a>
-        </div>
-    </section>
+        <section class="menu-cta-banner">
+            <div class="cta-content">
+                <h2>Ready for a Feast?</h2>
+                <p>Skip the wait by booking your table online in just a few clicks.</p>
+                <div class="cta-btns">
+                    <a href="reservation.php" class="btn btn-primary">Book Your Table</a>
+                    <a href="contact.php" class="btn btn-outline">Ask a Question</a>
+                </div>
+            </div>
+        </section>
 
     <?php include 'footer.php'; ?>
 
-    <script>
-        function filterMenu() {
-            let input = document.getElementById('menuSearch').value.toLowerCase();
-            let items = document.getElementsByClassName('menu-card');
-            for (let item of items) {
-                let name = item.querySelector('.item-name').innerText.toLowerCase();
-                item.style.display = name.includes(input) ? "block" : "none";
-            }
-        }
-
-        function filterCategory(category) {
-            let sections = document.getElementsByClassName('menu-category-section');
-            let buttons = document.getElementsByClassName('filter-btn');
-            
-            for (let btn of buttons) btn.classList.remove('active');
-            event.target.classList.add('active');
-
-            for (let section of sections) {
-                let catTitle = section.querySelector('.category-heading').innerText;
-                section.style.display = (category === 'all' || catTitle === category) ? "block" : "none";
-            }
-        }
-    </script>
 </body>
 </html>
