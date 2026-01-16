@@ -22,7 +22,7 @@
                 </div>
             <?php else: ?>
                 <div class="nav-auth-btns"> 
-                    <a href="dashboard.php" class="nav-btn dashboard-btn">Dashboard</a>
+                    <a href="dashboard.php" class="<?php echo ($activePage == 'dashboard') ? 'active' : ''; ?> nav-btn dashboard-btn">Dashboard</a>
                 </div>
             <?php endif; ?>
         </nav>
